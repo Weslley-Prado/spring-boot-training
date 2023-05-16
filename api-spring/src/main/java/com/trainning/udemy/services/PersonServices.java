@@ -1,6 +1,8 @@
 package com.trainning.udemy.services;
 
 import java.util.List;
+
+
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import com.trainning.udemy.exceptions.ResourceNotFoundException;
 import com.trainning.udemy.mapper.DozerMapper;
 import com.trainning.udemy.models.Person;
 import com.trainning.udemy.repositories.PersonRepository;
+
+//Dozer é uma ferramente de mapper
 
 @Service
 public class PersonServices {
