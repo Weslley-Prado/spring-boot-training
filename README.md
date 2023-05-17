@@ -13,3 +13,12 @@ Uma característica importante dos objetos de valor é que eles são imutáveis,
 O uso de objetos de valor traz benefícios como simplicidade, reusabilidade e segurança, uma vez que os objetos imutáveis são mais fáceis de serem compreendidos, testados e compartilhados entre diferentes partes do sistema.
 
 No contexto do desenvolvimento de software, o padrão Value Object é amplamente utilizado em conjunto com outros padrões, como o Domain-Driven Design (DDD), para modelar de forma mais precisa e expressiva o domínio de uma aplicação.
+
+## Flyway
+
+O Flyway é uma ferramenta de migração de banco de dados. Cada migração possui um checksum (hash) único. Se for necessário refazer a migração, é recomendado desfazê-la primeiro usando o prefixo "U\_\_NOME".
+
+Para executar o projeto, use o seguinte comando no diretório do arquivo POM.xml: mvn clean package
+-> spring-boot:run -Dskip. Certifique-se de que a porta 8080 esteja liberada.
+
+Para executar as migrações do Flyway usando o Maven, utilize o seguinte comando no diritório do arquivo POM.xml: mvn flyway:migration. Isso garantirá que as migrações sejam aplicadas ao banco de dados.
