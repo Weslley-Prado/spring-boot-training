@@ -35,7 +35,6 @@ public class AuthServices {
 			
 			var user = repository.findByUsername(username);
 			
-			System.out.println("Repository " +user);
 			
 			var tokenResponse = new TokenVO();
 			if (user != null) {
