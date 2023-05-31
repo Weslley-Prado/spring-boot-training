@@ -16,11 +16,11 @@ public class OpenApiConfig {
 						.title("RESTful API with Java 17 and Spring Boot 3")
 						.version("v1")
 						.description("Some description about your API")
-						.termsOfService("https://pub.erudio.com.br/meus-cursos")
+						.termsOfService("Development of a Restful API with Hateoas and Security Features")
 						.license(
 								new License()
 								.name("Apache 2.0")
-								.url("https://pub.erudio.com.br/meus-cursos")
+								.url("https://www.tigersistem.com/")
 								)
 						);
 	}

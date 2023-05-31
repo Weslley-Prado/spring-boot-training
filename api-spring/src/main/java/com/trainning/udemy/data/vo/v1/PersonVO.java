@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import org.springframework.hateoas.RepresentationModel;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.dozermapper.core.Mapping;
@@ -16,38 +15,28 @@ import com.github.dozermapper.core.Mapping;
  * O client só conhece o VO(interface entre o client e o api
  */
 
-@JsonPropertyOrder({"id", "address", "first_name", "last_name", "gender"})
+@JsonPropertyOrder({"id", "firstName", "lastName", "address", "gender"})
 public class PersonVO extends RepresentationModel<PersonVO> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-    @Mapping("id")
+
+	@JsonProperty("id")
+	@Mapping("id")
 	private Long key;
-	
-	@JsonProperty("first_name")
 	private String firstName;
-	
-	@JsonProperty("last_name")
 	private String lastName;
 	private String address;
-	
-	@JsonIgnore
 	private String gender;
 	
 	public PersonVO() {}
 
-	
-	
 	public Long getKey() {
 		return key;
 	}
 
-
-
 	public void setKey(Long key) {
 		this.key = key;
 	}
-
-
 
 	public String getFirstName() {
 		return firstName;
@@ -84,7 +73,7 @@ public class PersonVO extends RepresentationModel<PersonVO> implements Serializa
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
+		int result = super.hashCode();
 		result = prime * result + ((address == null) ? 0 : address.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((gender == null) ? 0 : gender.hashCode());
@@ -97,7 +86,7 @@ public class PersonVO extends RepresentationModel<PersonVO> implements Serializa
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
