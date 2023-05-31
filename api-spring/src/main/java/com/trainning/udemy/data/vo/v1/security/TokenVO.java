@@ -31,11 +31,6 @@ public class TokenVO implements Serializable{
 		this.refreshToken = refreshToken;
 	}
 
-	public TokenVO(String username2, boolean authenticated2, Date now, Date validity, String accessToken2,
-			String refreshToken2) {
-		// TODO Auto-generated constructor stub
-	}
-
 	public String getUsername() {
 		return username;
 	}
