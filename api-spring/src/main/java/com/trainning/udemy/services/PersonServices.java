@@ -17,6 +17,8 @@ import com.trainning.udemy.mapper.DozerMapper;
 import com.trainning.udemy.models.Person;
 import com.trainning.udemy.repositories.PersonRepository;
 
+import jakarta.transaction.Transactional;
+
 //Dozer é uma ferramente de mapper
 
 @Service
@@ -78,6 +80,21 @@ public class PersonServices {
 		vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
 		return vo;
 	}
+	
+	@Transactional
+	public PersonVO disablePerson(Long id) {
+		
+		logger.info("Disabling one person!");
+		
+		repository.disablePerson(id);
+		
+		var entity = repository.findById(id)
+			.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+		var vo = DozerMapper.parseObject(entity, PersonVO.class);
+		vo.add(linkTo(methodOn(PersonController.class).findById(id)).withSelfRel());
+		return vo;
+	}
+	
 	
 	public void delete(Long id) {
 		
