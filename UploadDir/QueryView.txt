@@ -1,0 +1,41 @@
+-- View: public.mercafacil
+
+-- DROP VIEW public.mercafacil;
+
+CREATE OR REPLACE VIEW public.mercafacil
+ AS
+ SELECT fpp.idfilial,
+    fpp.idproduto,
+    p.codigo AS codigoproduto,
+    p.ean::text AS codigobarras,
+    p.nome AS nomeproduto,
+    fpp.preco,
+    promocao.valor AS produto_com_desconto,
+    grupo.nome::text AS grupo,
+    p.inativo AS produtoinativo,
+    subgrupo.nome::text AS subgrupo,
+    ''::text AS marca,
+    familia.nome::text AS familia,
+    ''::text AS categoria,
+    ''::text AS subcategoria,
+    ''::text AS complemento,
+    saldo.quantidade::text AS qantidade,
+    datafinal.datafinal,
+    p.lucrobrutominimo::text AS margem
+   FROM formacaoprecoproduto fpp
+     LEFT JOIN produto p ON p.id = fpp.idproduto
+     LEFT JOIN hierarquia subgrupo ON subgrupo.id = p.idhierarquia
+     LEFT JOIN hierarquia grupo ON grupo.codigo::text = "substring"(subgrupo.codigo::text, 1, 6)
+     LEFT JOIN familiaproduto familia ON familia.id = p.idfamilia
+     LEFT JOIN saldoestoque saldo ON saldo.codigoproduto::text = p.codigo::text
+     LEFT JOIN promocao datafinal ON datafinal.codigo::text = p.codigo::text
+     LEFT JOIN promocaoproduto promocao ON promocao.produto::text = p.codigo::text
+  ORDER BY fpp.idproduto, fpp.idfilial;
+
+ALTER TABLE public.mercafacil
+    OWNER TO postgres;
+
+GRANT ALL ON TABLE public.mercafacil TO postgres;
+GRANT ALL ON TABLE public.mercafacil TO unico;
+GRANT ALL ON TABLE public.mercafacil TO mercafacil;
+
