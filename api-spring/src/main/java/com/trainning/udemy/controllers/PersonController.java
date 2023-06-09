@@ -32,6 +32,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 //@CrossOrigin -> Se não definir nada, então fica tudo publico
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/person/v1")
 @Tag(name = "People", description= "Endpoints for Management")
@@ -97,7 +98,7 @@ public class PersonController {
 			return ResponseEntity.ok(service.findPersonsByName(firstName, pageable));
 		}
 	
-	@CrossOrigin(origins = "http://localhost:8080")
+	
 	@GetMapping(value = "/{id}",
 		produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML  })
 	@Operation(summary = "Finds a Person", description = "Finds a Person",

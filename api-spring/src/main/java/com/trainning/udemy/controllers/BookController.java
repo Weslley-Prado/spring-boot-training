@@ -1,13 +1,23 @@
 package com.trainning.udemy.controllers;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,11 +41,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/book/v1")
+@CrossOrigin(origins = "*")
 @Tag(name = "Book", description = "Endpoints for Managing Book")
 public class BookController {
 	
 	@Autowired
 	private BookServices service;
+	
+	@Autowired
+	PagedResourcesAssembler<BookVO> assembler;
 	
 	@GetMapping(
 		produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML })
@@ -55,15 +69,33 @@ public class BookController {
 			@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content),
 		}
 	)
-	public ResponseEntity<PagedModel<EntityModel<BookVO>>> findAll(
-			@RequestParam(value = "page", defaultValue = "0") Integer page,
-	        @RequestParam(value = "size", defaultValue = "12") Integer size,
-	        @RequestParam(value = "direction", defaultValue = "asc") String direction
-	) {
-		var sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
-	    
-		Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "title"));
-		return ResponseEntity.ok(service.findAll(pageable));
+	public ResponseEntity<?> findAll(
+	        @RequestParam(value="page", defaultValue = "0") int page,
+	        @RequestParam(value="limit", defaultValue = "12") int limit,
+	        @RequestParam(value="direction", defaultValue = "asc") String direction) {
+
+	    var sortDirection = "desc".equalsIgnoreCase(direction) ? Direction.DESC : Direction.ASC;
+
+	    Pageable pageable = PageRequest.of(page, limit, Sort.by(sortDirection, "title"));
+
+	    Page<BookVO> books = service.findAll(pageable);
+
+	    books.stream()
+	            .forEach(p -> p.add(
+	                    linkTo(methodOn(BookController.class).findById(p.getKey())).withSelfRel()
+	            )
+	    );
+
+	    List<EntityModel<BookVO>> bookList = books.stream()
+	            .map(book -> EntityModel.of(book,
+	                    linkTo(methodOn(BookController.class).findById(book.getKey())).withSelfRel()
+	                )
+	            )
+	            .collect(Collectors.toList());
+	    CollectionModel<EntityModel<BookVO>> resources = CollectionModel.of(bookList);
+
+	    return new ResponseEntity<>(resources, HttpStatus.OK);
+
 	}
 
 	

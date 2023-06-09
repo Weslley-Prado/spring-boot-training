@@ -12,8 +12,8 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
 @Entity
-@Table(name = "books")
-public class Book implements Serializable {
+@Table(name="books")
+public class Book implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
@@ -21,9 +21,9 @@ public class Book implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(nullable = false, length = 180)
+	@Column(name = "author", nullable = false, length = 180)
 	private String author;
-
+	
 	@Column(name = "launch_date", nullable = false)
 	@Temporal(TemporalType.DATE)
 	private Date launchDate;
@@ -34,7 +34,8 @@ public class Book implements Serializable {
 	@Column(nullable = false, length = 250)
 	private String title;
 	
-	public Book() {}
+	public Book() {
+	}
 
 	public Long getId() {
 		return id;
